@@ -1,0 +1,41 @@
+syntax= "proto3";
+
+package order_proto;
+
+option  go_package = "./orderpb";
+
+service OrderService {
+  rpc Create(Order) returns (Empty) {}
+  rpc Cancel(OrderID) returns (Empty) {}
+  rpc GetOpen(AccountID) returns (Orders) {}
+}
+
+message Order {
+  string ID=1;
+  string Symbol=2;
+  string AccountID=3;
+  double Price=4;
+  string Status=5;
+  string Type=6;
+  string Side=7;
+  int64 Time=8;
+  bool Leverage=9;
+  bool Working=10;
+  double TakeProfit=11;
+  double StopLoss=12;
+  bool GuaranteedStopLoss=13;
+  double Quantity=14;
+}
+message Empty{}
+
+message OrderID {
+  string value=1;
+}
+
+message AccountID {
+  string value=1;
+}
+
+message Orders {
+  repeated Order value=1;
+}
