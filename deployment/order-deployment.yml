@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dev-order-service
+  labels:
+    app: dev-order-service
+spec:
+  selector:
+    matchLabels:
+      app: dev-order-service
+  template:
+    metadata:
+      labels:
+        app: dev-order-service
+    spec:
+      containers:
+        - name: dev-order-service
+          image: vprokopenya/order:latest
+          env:
+            - name: DB_NAME
+              value: orders-db
+            - name: POSTGRES_PORT
+              value: '5432'
+            - name: POSTGRES_USER
+              value: user
+            - name: POSTGRES_HOST
+              value: dev-order-service-db
+            - name: POSTGRES_PASSWORD
+              value: "1234"
+            - name: REDIS_ADDR
+              value: dev-generator-service-redis:6379
+            - name: POSITION_PORT
+              value: dev-position-service:50005

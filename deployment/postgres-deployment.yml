@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dev-order-service-db
+spec:
+  selector:
+    matchLabels:
+      app: dev-order-service-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dev-order-service-db
+    spec:
+      containers:
+        - name: dev-order-service-db
+          image: postgres
+          volumeMounts:
+            - name: dev-order-service-pvc
+              mountPath: /data
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dev-order-service-db-secret-config
+                  key: password
+            - name: POSTGRES_DB
+              value: orders-db
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+            - name: POSTGRES_USER
+              value: user
+      volumes:
+        - name: dev-order-service-pvc
+          persistentVolumeClaim:
+            claimName: dev-order-service-pvc
+
+
+

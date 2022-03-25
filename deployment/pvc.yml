@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dev-order-service-pvc
+  namespace: default
+  labels:
+    env: dev
+spec:
+  storageClassName: ""
+  volumeName: dev-order-service-db-pv
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi

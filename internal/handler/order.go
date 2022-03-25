@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"fmt"
+	"github.com/HekapOo-hub/orderService/internal/config"
 	"github.com/HekapOo-hub/orderService/internal/model"
 	"github.com/HekapOo-hub/orderService/internal/proto/orderpb"
 	"github.com/HekapOo-hub/orderService/internal/proto/positionpb"
@@ -15,8 +16,7 @@ import (
 )
 
 const (
-	PositionPort = ":50005"
-	OrderPort    = ":50004"
+	OrderPort = ":50004"
 )
 
 type OrderHandler struct {
@@ -31,7 +31,12 @@ func NewOrderHandler(ctx context.Context) (*OrderHandler, error) {
 		log.Warnf("new order handler: %v", err)
 		return nil, fmt.Errorf("new order handler: %w", err)
 	}
-	conn, err := grpc.Dial(PositionPort, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	positionPort, err := config.GetPositionPort()
+	if err != nil {
+		log.Warnf("new order handler: %v", err)
+		return nil, fmt.Errorf("new order handler: %v", err)
+	}
+	conn, err := grpc.Dial(positionPort.Value, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Warnf("new order handler: %v", err)
 		return nil, fmt.Errorf("new oprder handler: %w", err)
